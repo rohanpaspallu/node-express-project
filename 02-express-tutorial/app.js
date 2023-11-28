@@ -1,4 +1,5 @@
 const http = require("http");
+const fs = require("fs");
 
 const server = http.createServer((req, res) => {
   console.log("req is :", req.method, req.url);
@@ -16,7 +17,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(404, "unsuccessful response", {
       "content-type": "text/html",
     });
-    res.write("<h1 style='color:red'>Page Not found</h1>", "utf8");
+    res.write(fs.readFileSync("./index.html", "utf-8"), "utf8");
     res.end();
   }
 });
