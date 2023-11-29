@@ -1,5 +1,5 @@
 const express = require("express");
-const { products } = require("./data");
+const { products, people } = require("./data");
 const app = express();
 
 //SSR
@@ -38,6 +38,21 @@ app.get("/api/products/:id", (req, res) => {
   findProduct
     ? res.send(findProduct)
     : res.status(404).send("Product Doesnt Exist");
+});
+
+app.get("/api/productsNew/query", (req, res) => {
+  console.log("params in query string : ", req.query);
+  const { name, id } = req.query;
+  let sortedPeople = [...people];
+
+  if (name) sortedPeople = sortedPeople.filter((i) => i.name.startsWith(name));
+
+  // if (id) sortedPeople = sortedPeople.filter((i) => i.id == id);
+  // res.json(sortedPeople);
+
+  sortedPeople.length < 1
+    ? res.status(200).send("<h2>Unfortunately the person doesn't exist</h2>")
+    : res.status(200).json({ success: true, data: sortedPeople });
 });
 
 app.listen(5000, () => {
