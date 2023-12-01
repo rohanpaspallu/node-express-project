@@ -66,6 +66,20 @@ app.put("/api/people/:id", (req, res) => {
         data: `person doesnt exist with id : ${req.params.id}`,
       });
 });
+
+//delete
+app.delete("/api/people/:id", (req, res) => {
+  const personExists = people.find((p) => p.id === Number(req.params.id));
+  const newPeople = people.filter((p) => p.id !== Number(req.params.id));
+
+  console.log("does it come here", personExists);
+  personExists
+    ? res.status(200).json({ success: true, data: newPeople })
+    : res
+        .status(401)
+        .json({ success: false, data: `The id ${req.params.id} doesnt exist` });
+});
+
 app.listen(5000, () => {
   console.log(`Server running on 5000....`);
 });
