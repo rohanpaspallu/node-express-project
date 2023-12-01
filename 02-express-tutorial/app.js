@@ -23,6 +23,7 @@ app.post("/login", (req, res) => {
     : res.status(401).send("<h1>Please enter a name</h1>");
 });
 
+//post with html data
 app.post("/api/people", (req, res) => {
   console.log(req.body);
 
@@ -37,6 +38,7 @@ app.post("/api/people", (req, res) => {
   // res.send("works");
 });
 
+//post with api
 app.post("/api/postman/people", (req, res) => {
   const { name } = req.body;
   name.length > 0
@@ -46,6 +48,24 @@ app.post("/api/postman/people", (req, res) => {
         .json({ success: false, msg: "please provide name value" });
 });
 
+//put
+app.put("/api/people/:id", (req, res) => {
+  console.log(req.params);
+  console.log(req.body);
+
+  const newPerson = people.find((p) => p.id === Number(req.params.id));
+  const newPeople = people.map((p) => {
+    if (p.id == req.params.id) p.name = req.body.name;
+    return p;
+  });
+
+  newPerson
+    ? res.status(200).json({ success: true, data: newPeople })
+    : res.status(401).json({
+        success: false,
+        data: `person doesnt exist with id : ${req.params.id}`,
+      });
+});
 app.listen(5000, () => {
   console.log(`Server running on 5000....`);
 });
