@@ -1,31 +1,14 @@
 const express = require("express");
-const { people } = require("./data");
-const app = express();
+const { people } = require("../data");
+const router = express.Router();
 
-// app.use(express.static("./methods-public"));
-//parse form
-app.use(express.urlencoded({ extended: false }));
-//parse json
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.status(200).json({ success: true, data: { name: "rohan", age: 27 } });
-});
-
-//post with html data
-app.post("/login", (req, res) => {
-  console.log("reaches here yayy !!!", req.body);
-  req?.body?.name?.length > 0
-    ? res.status(200).send(`<h1>Welcome ${req?.body?.name}</h1>`)
-    : res.status(401).send("<h1>Please enter a name</h1>");
-});
-
-app.get("/api/people", (req, res) => {
+router.get("/", (req, res) => {
+  console.log;
   res.status(200).json({ success: true, data: people });
 });
 
 //post with json data
-app.post("/api/people", (req, res) => {
+router.post("/", (req, res) => {
   console.log(req.body);
 
   req?.body?.name.length > 0
@@ -40,7 +23,7 @@ app.post("/api/people", (req, res) => {
 });
 
 //post with api postman
-app.post("/api/people/postman", (req, res) => {
+router.post("/postman", (req, res) => {
   const { name } = req.body;
   name.length > 0
     ? res.status(200).json({ success: true, data: [...people, name] })
@@ -50,7 +33,7 @@ app.post("/api/people/postman", (req, res) => {
 });
 
 //put
-app.put("/api/people/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   console.log(req.params);
   console.log(req.body);
 
@@ -69,7 +52,7 @@ app.put("/api/people/:id", (req, res) => {
 });
 
 //delete
-app.delete("/api/people/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   const personExists = people.find((p) => p.id === Number(req.params.id));
   const newPeople = people.filter((p) => p.id !== Number(req.params.id));
 
@@ -81,6 +64,4 @@ app.delete("/api/people/:id", (req, res) => {
         .json({ success: false, data: `The id ${req.params.id} doesnt exist` });
 });
 
-app.listen(5000, () => {
-  console.log(`Server running on 5000....`);
-});
+module.exports = router;
